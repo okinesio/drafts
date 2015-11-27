@@ -118,7 +118,7 @@ struct gyro_sleep_setting {
  *
  *
  */
-BMI160_RETURN_FUNCTION_TYPE bmi160_initialize_sensor(void);
+int bmi160_initialize_sensor(void);
 /*!
  *	@brief This Function used to read the sensor data using
  *	different running mode

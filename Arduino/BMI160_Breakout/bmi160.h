@@ -148,7 +148,7 @@ typedef	int64_t s64;/**< used for signed 64bit */
 *	define your data types based on your
 *	machine/compiler/controller configuration
 */
-#define  MACHINE_32_BIT
+#define  MACHINE_16_BIT
 
 /*! @brief
  *	If your machine support 16 bit
@@ -183,6 +183,7 @@ typedef	unsigned long int u32;/**< used for unsigned 32bit */
 define the MACHINE_32_BIT*/
 #elif defined MACHINE_32_BIT
 /*signed integer types*/
+
 typedef	signed char  s8;/**< used for signed 8bit */
 typedef	signed short int s16;/**< used for signed 16bit */
 typedef	signed int s32;/**< used for signed 32bit */

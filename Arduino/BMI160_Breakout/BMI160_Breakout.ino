@@ -2,7 +2,7 @@
 #include "bmi160.h"
 
 void setup() {
-  boolean bmi = bmi160_initialize_sensor(void);
+  int bmi = bmi160_initialize_sensor();
 
 }
 

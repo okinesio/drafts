@@ -69,9 +69,9 @@ struct bmi160_mag_xyz_s32_t magxyz;
  *
  *
  */
-BMI160_RETURN_FUNCTION_TYPE bmi160_initialize_sensor(void)
+int bmi160_initialize_sensor(void)
 {
-	BMI160_RETURN_FUNCTION_TYPE com_rslt = BMI160_INIT_VALUE;
+	int com_rslt = BMI160_INIT_VALUE;
  /*	Based on the user need configure I2C or SPI interface.
   *	It is sample code to explain how to use the bmi160 API*/
 	#ifdef INCLUDE_BMI160API
