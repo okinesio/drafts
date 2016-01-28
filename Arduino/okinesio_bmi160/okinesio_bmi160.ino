@@ -1,6 +1,11 @@
-// okinesio 2015 //
-// This work is licensed under a Creative Commons Attribution 4.0 International License. //
-// https://creativecommons.org/licenses/by/4.0/ //
+/**********************************************************************
+* okinesio 2015 - 2016
+* http://okinesio.org
+*
+* This work is licensed under a Creative Commons Attribution 4.0 International License.
+* https://creativecommons.org/licenses/by/4.0/
+*
+**********************************************************************/
 
 #include <Streaming.h>
 #include <Arduino.h>
@@ -14,32 +19,49 @@ struct accelData {
   int16_t z;
 };
 
+uint8_t c = 0; // counted steps
+
+
 void setup() {
 
-  //Initialize GPIO for CS/SS
+  // Initialize GPIO for CS/SS
   pinMode(slaveSelectPin, OUTPUT);
   digitalWrite(slaveSelectPin, HIGH);
 
-  // begin SPI init
+  // Begin SPI init
   SPI.begin();
 
-  //Initialize serial for debugging
+  // Initialize serial for debugging
   Serial.begin(115200);
   delay(100);
 
-  //Initialize the IMU. Add your initializations in there
-  imuInit();
+  // Initialize the sensor. Add your initializations in there
+  initBMI160();
 
   // Hello
-  Serial.println("// okinesio bmi160 breakout board //"); 
-  // Print the chip ID
-  Serial << "Chip ID: " << imuGetChipId() << endl;
+  delay(1000);
+  Serial << ">> okinesio - BMI160 Breakout Board <<\n" << endl;
 }
 
 void loop()
 {
-  struct accelData myAccData;
-  imuGetAccelData(&myAccData);
-  Serial << "Acc X: " << myAccData.x << " Acc Y: " << myAccData.y <<  " Acc Z: " << myAccData.z << endl;
+  struct accelData acc;
+  imuGetAccelData(&acc);
+
+  // Print accelerometer data (X, Y and Z)
+  Serial << "ACC:\t" << acc.x << "\t" << acc.y <<  "\t" << acc.z << "\t\t";
+  
+  // Get current steps
+  Serial << "STEPS:\t" << getStepCount() << endl;
+
+  // Get current step count (updates only if a step is counted)
+  /*
+  if (c != getStepCount()) {
+    Serial << "STEPS:\t" << getStepCount() << endl;
+    c = getStepCount();
+  }
+  */
+
+  // Delay for better readability of serial monitor
   delay(100);
 }

@@ -1,3 +1,40 @@
+/********************************************************************************
+* okinesio 2015 - 2016
+* http://okinesio.org
+*
+* Note:  Additional functions for our main code.
+*        Basic code from Bosch Sensortec can be found below this code. 
+*
+********************************************************************************/
+
+void initBMI160(void)
+{
+  // init IMU
+  imuInit();
+  
+  /* Enable specific interupts/functions */
+  
+  uint8_t data = 0;
+  
+  // enable step counter in normal mode
+  uint8_t cData[2] = {0x15, 0x0B};
+  spiBurstWrite(0x7A, cData, 2);
+  microPause();
+}
+
+// get current steps
+int16_t getStepCount(void)
+{
+  uint8_t data[2];
+  spiBurstRead(0x78, data, 2); // 0x78 = step count, 0x79 = multiplier
+  
+  int16_t steps = (int16_t)data[0] + ((int16_t)data[1] * 255);
+  return steps;
+}
+
+
+
+
 /****************************************************************************
 * Copyright (C) 2011 - 2015 Bosch Sensortec GmbH
 *
@@ -63,12 +100,13 @@ uint8_t imuGetChipId(void)
 void imuInit(void)
 {
   uint8_t data = 0;
+  
   // Soft Reset
   data = 0xB6;
   imuSetCommandRegister(data);
   microPause();
 
-  //Prevent the gyroscope wake-up
+  // Prevent the gyroscope wake-up
   data = 0;
   spiBurstWrite(0x6C, &data, 1);
   microPause();
@@ -92,7 +130,7 @@ void spiBurstWrite(uint8_t regAddress, uint8_t *regValue, uint8_t count)
   //Generic write function
   SPI.beginTransaction(SPISettings(500000, MSBFIRST, SPI_MODE0));
   digitalWrite(slaveSelectPin, LOW);
-  SPI.transfer(regAddress & ~0x80);  //7 bit addressing and MSB low to signify write
+  SPI.transfer(regAddress & ~0x80);  // 7 bit addressing and MSB low to signify write
   for (uint8_t i = 0; i < count; i++)
   {
     SPI.transfer(regValue[i]);
@@ -107,7 +145,7 @@ void spiBurstRead(uint8_t regAddress, uint8_t *regValue, uint8_t count)
   //Generic read function
   SPI.beginTransaction(SPISettings(500000, MSBFIRST, SPI_MODE0));
   digitalWrite(slaveSelectPin, LOW);
-  SPI.transfer(regAddress | 0x80);  //7 bit addressing and MSB high to signify read
+  SPI.transfer(regAddress | 0x80);  // 7 bit addressing and MSB high to signify read
   for (uint8_t i = 0; i < count; i++)
   {
     regValue[i] = SPI.transfer(0x00);
